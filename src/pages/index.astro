@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 
-import type { BlogArticles } from '../types/blog-articles.astro';
+import type { BlogArticles } from '../types/BlogArticles.astro';
 
 import { newtClient } from '../lib/newt'
 
@@ -21,7 +21,7 @@ const { items: blogs } = await newtClient.getContents<BlogArticles>({
         blogs.map((blog) => {
           return (
             <li>
-              <a href={`/blogs/${blog.slug}`}>{blog.title}</a>
+              <a href={`/blogs/${blog.slug}`} >{blog.title}</a>
             </li>
           )
         })
