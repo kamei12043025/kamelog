@@ -1,7 +1,24 @@
 ---
+export interface Tag {
+  name: string
+  // 他のタグ関連のプロパティがあればここに追加
+}
+
 export interface BlogArticles {
-    title: string
-    slug: string
-    body: string
+  title: string
+  slug: string
+  body: string
+  tags: Tag[]
+  coverImage: {
+    src: string
+    width: number
+    height: number
   }
+  publishedAt: string
+  _sys: {
+    raw: {
+      publishedAt: string
+    }
+  }
+}
 ---
