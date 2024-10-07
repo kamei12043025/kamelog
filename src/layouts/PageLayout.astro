@@ -1,11 +1,12 @@
 ---
 import Layout from './Layout.astro'
-
+import Header from '../components/header/index.astro'
 const { title, description } = Astro.props
 ---
 
 <Layout title={title} description={description}>
-  <main class="container mx-auto px-4 md:px-0">
+  <Header />
+  <main class="container mx-auto px-5 md:px-20 py-10 md:py-20">
     <slot />
   </main>
 </Layout>

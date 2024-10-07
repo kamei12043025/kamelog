@@ -1,0 +1,215 @@
+---
+import MenuIcon from '@icons/menu.astro'
+import ThemeIcon from '@icons/themeIcon.astro'
+import CloseIcon from '@icons/close.astro'
+import ArrowRightIcon from '@icons/arrowRight.astro'
+
+import { paths } from '@constants/path'
+
+const topPage = Astro.url.pathname === paths.home
+const aboutPage = Astro.url.pathname === paths.about
+const contactPage = Astro.url.pathname === paths.contact
+const articlesPage = Astro.url.pathname === paths.articles
+---
+
+<header
+  id="header"
+  class="fixed top-0 left-0 w-full bg-white dark:bg-black z-50"
+>
+  <div class="container py-2 md:py-3 px-5 md:px-6 mx-auto flex items-center">
+    <!-- SP Menu Button -->
+    <div class="flex-1 lg:hidden">
+      <button role="button" id="menuButton" class="theme-color">
+        <MenuIcon />
+      </button>
+    </div>
+
+    <!-- Logo -->
+    <div class="flex-1 text-center lg:text-left">
+      {
+        topPage ? (
+          <h1 class="base-text-2xl uppercase">
+            <a href="#header" aria-label="トップページ上部に戻る">
+              KAMELOG
+            </a>
+          </h1>
+        ) : (
+          <p class="base-text-2xl uppercase">
+            <a href="/" aria-label="トップページに戻る">
+              KAMELOG
+            </a>
+          </p>
+        )
+      }
+    </div>
+
+    <!-- PC Navigation -->
+    <nav class="hidden lg:flex flex-1 justify-center">
+      <ul class="flex" aria-label="ヘッダーメニュー">
+        <li>
+          {
+            topPage ? (
+              <span
+                class="nav-link-current px-3 current-page text-purple-800 dark:text-custom-purple"
+                aria-current="page"
+              >
+                Home
+              </span>
+            ) : (
+              <a
+                href={paths.home}
+                class="nav-link-text px-3 hover:border-b-2 hover:border-purple-800 hover:text-purple-800 dark:hover:text-custom-purple duration-150 outline-purple-800"
+              >
+                Home
+              </a>
+            )
+          }
+        </li>
+        <li>
+          {
+            articlesPage ? (
+              <span
+                class="nav-link-current px-3 current-page text-blue-600 dark:text-custom-blue"
+                aria-current="page"
+              >
+                Articles
+              </span>
+            ) : (
+              <a
+                href={paths.articles}
+                class="nav-link-text px-3 hover:border-b-2 hover:border-blue-600 hover:text-blue-600 dark:hover:text-custom-blue duration-150 outline-blue-600"
+              >
+                Articles
+              </a>
+            )
+          }
+        </li>
+        <li>
+          {
+            aboutPage ? (
+              <span
+                class="nav-link-current px-3 current-page text-green-600 dark:text-custom-green"
+                aria-current="page"
+              >
+                About
+              </span>
+            ) : (
+              <a
+                href={paths.about}
+                class="nav-link-text px-3 hover:border-b-2 hover:border-green-600 hover:text-green-600 dark:hover:text-custom-green duration-150 outline-green-600"
+              >
+                About
+              </a>
+            )
+          }
+        </li>
+        <li>
+          {
+            contactPage ? (
+              <span
+                class="nav-link-current uppercase px-3 text-xl current-page text-yellow-600 dark:text-custom-yellow"
+                aria-current="page"
+              >
+                Contact
+              </span>
+            ) : (
+              <a
+                href={paths.contact}
+                class="nav-link-text px-3 hover:border-b-2 hover:border-yellow-600 hover:text-yellow-600 dark:hover:text-custom-yellow duration-150 outline-yellow-600"
+              >
+                Contact
+              </a>
+            )
+          }
+        </li>
+      </ul>
+    </nav>
+    <!-- Theme Toggle -->
+    <div class="flex-1 flex justify-end">
+      <ThemeIcon />
+    </div>
+  </div>
+</header>
+
+<dialog
+  id="menuDialog"
+  class="lg:hidden fixed inset-0 w-4/5 h-full bg-white dark:bg-custom-dark p-0 m-0 max-w-none max-h-none transition-transform duration-300 ease-in-out transform -translate-x-full backdrop:bg-black/50 backdrop:transition-opacity backdrop:duration-300 backdrop:ease-in-out"
+>
+  <div class="w-full h-full flex flex-col">
+    <div
+      class="flex justify-start items-center border-b border-gray-300 dark:border-gray-600"
+    >
+      <button
+        role="button"
+        id="closeButton"
+        class="w-16 h-16 flex items-center justify-center text-white dark:text-black dark:hover:text-white dark:hover:bg-custom-purple bg-black dark:bg-white"
+      >
+        <CloseIcon />
+      </button>
+    </div>
+    <!-- SP Navigation -->
+    <nav>
+      <ul aria-label="ヘッダーメニュー">
+        <a
+          href={paths.home}
+          class="dialog-menu outline-purple-800 dark:outline-custom-purple group"
+          autofocus
+        >
+          <li class="nav-link-text">Home</li>
+          <ArrowRightIcon class="dialog-arrow-animation" />
+        </a>
+        <a
+          href={paths.articles}
+          class="dialog-menu outline-blue-600 dark:outline-custom-blue group"
+        >
+          <li class="nav-link-text">Articles</li>
+          <ArrowRightIcon class="dialog-arrow-animation" />
+        </a>
+        <a
+          href={paths.about}
+          class="dialog-menu outline-green-600 dark:outline-custom-green group"
+        >
+          <li class="nav-link-text">About</li>
+          <ArrowRightIcon class="dialog-arrow-animation" />
+        </a>
+        <a
+          href={paths.contact}
+          class="dialog-menu outline-yellow-600 dark:outline-custom-yellow group"
+        >
+          <li class="nav-link-text">Contact</li>
+          <ArrowRightIcon class="dialog-arrow-animation" />
+        </a>
+      </ul>
+    </nav>
+  </div>
+</dialog>
+
+<script>
+  const menuButton = document.getElementById('menuButton')
+  const menuDialog = document.getElementById(
+    'menuDialog',
+  ) as HTMLDialogElement | null
+  const closeButton = document.getElementById('closeButton')
+
+  menuButton?.addEventListener('click', () => {
+    menuDialog?.showModal()
+    document.body.style.overflow = 'hidden'
+    document.body.style.position = 'fixed'
+    document.body.style.width = '100%'
+    setTimeout(() => {
+      menuDialog?.classList.remove('-translate-x-full')
+      menuDialog?.classList.add('backdrop:opacity-100')
+    }, 0)
+  })
+
+  closeButton?.addEventListener('click', () => {
+    menuDialog?.classList.add('-translate-x-full')
+    menuDialog?.classList.remove('backdrop:opacity-100')
+    setTimeout(() => {
+      menuDialog?.close()
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+    }, 300)
+  })
+</script>
