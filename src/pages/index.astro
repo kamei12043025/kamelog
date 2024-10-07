@@ -1,31 +1,93 @@
 ---
-import Layout from '../layouts/Layout.astro'
-
-import type { BlogArticles } from '../types/BlogArticles.astro';
-
+import PageLayout from '../layouts/PageLayout.astro'
+import type { BlogArticles } from '../types/BlogArticles.astro'
 import { newtClient } from '../lib/newt'
+import { Image } from 'astro:assets'
+import FormattedDate from '@components/utils/FormattedDate.astro'
 
 const { items: blogs } = await newtClient.getContents<BlogArticles>({
   appUid: 'blog',
   modelUid: 'article',
   query: {
-    select: ['title', 'slug', 'body'],
+    select: ['title', 'slug', 'body', 'tags', 'coverImage', '_sys'],
   },
 })
+
+const gridConfigs = [
+  { cols: 'grid-cols-1 md:grid-cols-3 lg:grid-cols-3', slice: [0, 3] },
+  { cols: 'grid-cols-1 md:grid-cols-3 lg:grid-cols-4', slice: [3, 11] },
+]
 ---
 
-<Layout title="kamelog" description="NewtとAstroを利用したブログです">
-  <main>
-    <ul>
-      {
-        blogs.map((blog) => {
-          return (
-            <li>
-              <a href={`/blogs/${blog.slug}`} >{blog.title}</a>
-            </li>
-          )
-        })
-      }
-    </ul>
-  </main>
-</Layout>
+<PageLayout
+  title="kamelog"
+  description="NewtとAstroを利用したブログです。日々のアウトプットを残していきます。"
+>
+  <div class="grid grid-cols-12 gap-4">
+    {
+      gridConfigs.map(({ cols, slice }) => (
+        <div class={`col-span-12 grid ${cols} gap-4`}>
+          {blogs.slice(...slice).map((blog) => (
+            <div class="col-span-1">
+              <article
+                aria-labelledby={blog.slug}
+                data-href={`/blogs/${blog.slug}`}
+                class="grid grid-rows-[auto_1fr] h-full bg-white transition-all group relative"
+              >
+                <div class="absolute bottom-0 left-0 w-1/3 h-[1px] bg-blue-500 group-hover:w-full transition-all" />
+
+                <h2
+                  id={blog.slug}
+                  class="text-xl mb-2 row-start-2 line-clamp-2 group-hover:text-blue-500"
+                >
+                  <a href={`/blogs/${blog.slug}`}>{blog.title}</a>
+                </h2>
+                {blog.tags && blog.tags.length > 0 && (
+                  <div class="mb-2 row-start-3">
+                    <span>カテゴリ: </span>
+                    {blog.tags.map((tag) => (
+                      <a
+                        href={`/tags/${tag.name}`}
+                        class="text-center px-2 py-1 text-xs bg-gray-200 text-gray-700 rounded-full group-hover:bg-gray-300 transition-colors"
+                      >
+                        {tag.name}
+                      </a>
+                    ))}
+                  </div>
+                )}
+                <p class="mb-2 row-start-4 text-xs md:text-sm text-gray-500">
+                  <span>投稿日: </span>
+                  <FormattedDate date={blog._sys.raw.publishedAt} />
+                </p>
+                <a
+                  href={`/blogs/${blog.slug}`}
+                  tabindex="-1"
+                  class="row-start-1 mb-4 relative overflow-hidden"
+                >
+                  {blog.coverImage && (
+                    <Image
+                      src={blog.coverImage.src}
+                      width={blog.coverImage.width}
+                      height={blog.coverImage.height}
+                      fetchpriority="high"
+                      loading="eager"
+                      format="avif"
+                      alt=""
+                      class="w-full h-auto object-cover transition-transform group-hover:scale-110"
+                    />
+                  )}
+                  <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="text-white text-lg font-bold transform translate-y-1 group-hover:translate-y-0 transition-transform">
+                      記事を読む
+                      <span class="sr-only">{blog.title}</span>
+                    </span>
+                  </div>
+                </a>
+              </article>
+            </div>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</PageLayout>
