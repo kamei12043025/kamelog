@@ -1,7 +1,15 @@
 ---
-export interface Tag {
+interface Tag {
   name: string
-  // 他のタグ関連のプロパティがあればここに追加
+  slug: string
+}
+
+interface Category {
+  name: string
+  fullName: string
+  slug: string
+  _id: string
+  _sys: any  // または適切な型を指定
 }
 
 export interface BlogArticles {
@@ -9,6 +17,7 @@ export interface BlogArticles {
   slug: string
   body: string
   tags: Tag[]
+  category: Category 
   coverImage: {
     src: string
     width: number
