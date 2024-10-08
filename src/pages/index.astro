@@ -20,74 +20,77 @@ const gridConfigs = [
 ---
 
 <PageLayout
-  title="kamelog"
+  title="KAMELOG"
   description="NewtとAstroを利用したブログです。日々のアウトプットを残していきます。"
 >
-  <div class="grid grid-cols-12 gap-4">
-    {
-      gridConfigs.map(({ cols, slice }) => (
-        <div class={`col-span-12 grid ${cols} gap-4`}>
-          {blogs.slice(...slice).map((blog) => (
-            <div class="col-span-1">
-              <article
-                aria-labelledby={blog.slug}
-                data-href={`/blogs/${blog.slug}`}
-                class="grid grid-rows-[auto_1fr] h-full bg-white transition-all group relative"
-              >
-                <div class="absolute bottom-0 left-0 w-1/3 h-[1px] bg-blue-500 group-hover:w-full transition-all" />
+<div class="grid grid-cols-12 gap-4">
+  {
+    gridConfigs.map(({ cols, slice }) => (
+      <div class={`col-span-12 grid ${cols} gap-6`}>
+        {blogs.slice(...slice).map((blog) => (
+          <div class="col-span-1">
+            <article
+              aria-labelledby={blog.slug}
+              data-href={`/blogs/${blog.slug}`}
+              class="grid grid-rows-[auto_1fr] h-full bg-transparent transition-all group relative"
+            >
+              <div class="absolute bottom-0 left-0 w-full h-[1px] flex">
+                <div class="w-1/3 theme-group-hover-border group-hover:w-full transition-all"></div>
+                <div class="w-2/3 bg-gray-400 dark:bg-white"></div>
+              </div>
 
+              <a href={`/blogs/${blog.slug}`} aria-label="">
                 <h2
                   id={blog.slug}
-                  class="text-xl mb-2 row-start-2 line-clamp-2 group-hover:text-blue-500"
+                  class="text-xl mb-2 row-start-2 line-clamp-2 theme-group-hover-text theme-color"
                 >
-                  <a href={`/blogs/${blog.slug}`}>{blog.title}</a>
+                  {blog.title}
                 </h2>
-                {blog.tags && blog.tags.length > 0 && (
-                  <div class="mb-2 row-start-3">
-                    <span>カテゴリ: </span>
-                    {blog.tags.map((tag) => (
-                      <a
-                        href={`/tags/${tag.name}`}
-                        class="text-center px-2 py-1 text-xs bg-gray-200 text-gray-700 rounded-full group-hover:bg-gray-300 transition-colors"
-                      >
-                        {tag.name}
-                      </a>
-                    ))}
-                  </div>
+              </a>
+              {blog.tags && blog.tags.length > 0 && (
+                <div class="mb-2 row-start-3">
+                  <span class="dark:text-white">Tag: </span>
+                  {blog.tags.map((blogTag) => (
+                    <a
+                      href={`/tags/${blogTag.slug}`}
+                      class="text-center px-2 py-1 ml-2 border border-gray-400 dark:border-white dark:text-white theme-color-hover text-xs "
+                    >
+                      #{blogTag.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+              <p class="mb-2 theme-color text-xs md:text-sm">
+                <span>投稿日: </span>
+                <FormattedDate date={blog._sys.raw.publishedAt} />
+              </p>
+              <a
+                href={`/blogs/${blog.slug}`}
+                class="row-start-1 mb-4 relative overflow-hidden"
+              >
+                {blog.coverImage && (
+                  <Image
+                    src={blog.coverImage.src}
+                    width={blog.coverImage.width}
+                    height={blog.coverImage.height}
+                    fetchpriority="high"
+                    loading="eager"
+                    format="avif"
+                    alt=""
+                    class="w-full h-auto object-cover transition-transform group-hover:scale-110"
+                  />
                 )}
-                <p class="mb-2 row-start-4 text-xs md:text-sm text-gray-500">
-                  <span>投稿日: </span>
-                  <FormattedDate date={blog._sys.raw.publishedAt} />
-                </p>
-                <a
-                  href={`/blogs/${blog.slug}`}
-                  tabindex="-1"
-                  class="row-start-1 mb-4 relative overflow-hidden"
-                >
-                  {blog.coverImage && (
-                    <Image
-                      src={blog.coverImage.src}
-                      width={blog.coverImage.width}
-                      height={blog.coverImage.height}
-                      fetchpriority="high"
-                      loading="eager"
-                      format="avif"
-                      alt=""
-                      class="w-full h-auto object-cover transition-transform group-hover:scale-110"
-                    />
-                  )}
-                  <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span class="text-white text-lg font-bold transform translate-y-1 group-hover:translate-y-0 transition-transform">
-                      記事を読む
-                      <span class="sr-only">{blog.title}</span>
-                    </span>
-                  </div>
-                </a>
-              </article>
-            </div>
-          ))}
-        </div>
-      ))
-    }
-  </div>
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span class="text-white text-lg font-bold transform translate-y-1 group-hover:translate-y-0 transition-transform">
+                    記事を読む
+                  </span>
+                </div>
+              </a>
+            </article>
+          </div>
+        ))}
+      </div>
+    ))
+  }
+</div>
 </PageLayout>
