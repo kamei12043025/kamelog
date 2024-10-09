@@ -1,8 +1,7 @@
 ---
 import BlogGrid from '@components/ui/blogGrid.astro'
+import PageHeader from '@components/ui/pageHeader.astro'
 import PageLayout from '../layouts/PageLayout.astro'
-import ScrollToTop from '@components/utils/scrollToTop.astro'
-import ScrollProgress from '@components/utils/scrollProgress.astro'
 
 import { newtClient } from '../lib/newt'
 
@@ -21,15 +20,9 @@ const { items: blogs } = await newtClient.getContents<BlogArticles>({
   title="KAMELOG"
   description="NewtとAstroを利用したブログです。日々のアウトプットを残していきます。"
 >
-  <hgroup class="space-y-4 mb-12">
-    <h2 class="theme-color text-center text-3xl md:text-5xl font-bold">
-      KAMELOG
-    </h2>
-    <p class="theme-color text-center text-sm md:text-base">
-      犬好きエンジニア歴1年の私的ブログです。
-    </p>
-  </hgroup>
+  <PageHeader
+    title="KAMELOG"
+    description="犬好きエンジニア歴1年の私的ブログです。"
+  />
   <BlogGrid blogs={blogs} />
-  <ScrollProgress />
-  <ScrollToTop />
 </PageLayout>

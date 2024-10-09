@@ -1,13 +1,12 @@
 ---
+import BlogGrid from '@components/ui/blogGrid.astro'
+import PageHeader from '@components/ui/pageHeader.astro'
+import PageLayout from 'src/layouts/PageLayout.astro'
+
 import { newtClient } from 'src/lib/newt'
 
 import type { BlogArticles } from 'src/types/BlogArticles.astro'
 
-import BlogGrid from '@components/ui/blogGrid.astro'
-import PageTitle from '@components/utils/pageTitle.astro'
-import PageLayout from 'src/layouts/PageLayout.astro'
-import ScrollToTop from '@components/utils/scrollToTop.astro'
-import ScrollProgress from '@components/utils/scrollProgress.astro'
 
 export async function getStaticPaths() {
   const { items: blogs } = await newtClient.getContents<BlogArticles>({
@@ -47,8 +46,9 @@ const tagBlogs = allBlogs.filter((blog) =>
   title={`${slug}記事一覧`}
   description={`${slug}のタグがついた記事の一覧ページです。`}
 >
-  <PageTitle title={`${slug} : 記事一覧`} />
+  <PageHeader
+    title={`${slug} : 記事一覧`}
+    description={`${slug}のタグがついた記事の一覧ページです。`}
+  />
   <BlogGrid blogs={tagBlogs} />
-  <ScrollProgress />
-  <ScrollToTop />
 </PageLayout>

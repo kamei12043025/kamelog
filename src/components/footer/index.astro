@@ -1,8 +1,8 @@
 ---
-import TagButton from '@components/ui/tagButton.astro'
 import GithubIcon from '@icons/github.astro'
-import LinkButton from '@components/ui/linkButton.astro'
+import LinkButton from '@components/ui/button/linkButton.astro'
 import TwitterIcon from '@icons/x.astro'
+import TagLinkButton from '@components/ui/button/tagLinkButton.astro'
 
 import { paths } from '@constants/path.ts'
 import { newtClient } from 'src/lib/newt'
@@ -93,7 +93,7 @@ const uniqueTags = [
         {
           uniqueTags.map((tag) => (
             <li>
-              <TagButton href={`/tags/${tag.slug}`} text={tag.name} />
+              <TagLinkButton href={`/tags/${tag.slug}`} text={tag.name} />
             </li>
           ))
         }
@@ -150,14 +150,14 @@ const uniqueTags = [
                 class="nav-link-current px-3 current-page text-green-600 dark:text-custom-green"
                 aria-current="page"
               >
-                当ブログについて
+                KAMELOGについて
               </span>
             ) : (
               <a
                 href={paths.about}
                 class="nav-link-text px-3 hover:border-b-2 hover:border-green-600 hover:text-green-600 dark:hover:text-custom-green duration-150 outline-green-600"
               >
-                当ブログについて
+                KAMELOGについて
               </a>
             )
           }
@@ -166,7 +166,7 @@ const uniqueTags = [
           {
             contactPage ? (
               <span
-                class="nav-link-current uppercase px-3 text-xl current-page text-yellow-600 dark:text-custom-yellow"
+                class="nav-link-current px-3 current-page text-yellow-600 dark:text-custom-yellow"
                 aria-current="page"
               >
                 お問い合わせ
@@ -186,7 +186,7 @@ const uniqueTags = [
 
     <div class="flex justify-center items-center">
       <a
-        href="https://github.com/kame-log"
+        href={paths.github}
         target="_blank"
         aria-label="GitHubを見る"
         class="theme-color hover:bg-gray-200 hover:text-purple-600 dark:hover:text-custom-purple rounded-md p-4 transition-colors duration-300"
@@ -196,7 +196,7 @@ const uniqueTags = [
         </span>
       </a>
       <a
-        href="https://twitter.com/kame_log"
+        href={paths.twitter}
         target="_blank"
         aria-label="X（旧Twitter）を見る"
         class="theme-color hover:bg-gray-200 hover:text-blue-600 dark:hover:text-custom-blue rounded-md p-4 transition-colors duration-300"
@@ -212,33 +212,41 @@ const uniqueTags = [
 </footer>
 
 <script>
-  const tabs =
-    document.querySelectorAll<HTMLButtonElement>('button[role="tab"]')
-  const panels = document.querySelectorAll<HTMLElement>('[role="tabpanel"]')
+  function setupFooter() {
+    const tabs =
+      document.querySelectorAll<HTMLButtonElement>('button[role="tab"]')
+    const panels = document.querySelectorAll<HTMLElement>('[role="tabpanel"]')
 
-  function selectTab(selectedTab: HTMLButtonElement) {
+    function selectTab(selectedTab: HTMLButtonElement) {
+      tabs.forEach((tab) => {
+        const isSelected = tab === selectedTab
+        tab.setAttribute('aria-selected', isSelected ? 'true' : 'false')
+        tab.setAttribute('tabindex', isSelected ? '-1' : '0')
+        tab.classList.toggle('selected', isSelected)
+        tab.classList.toggle('unselected', !isSelected)
+        if (isSelected) {
+          tab.classList.remove('focus:ring-2', 'focus:ring-blue-500')
+        } else {
+          tab.classList.add('focus:ring-2', 'focus:ring-blue-500')
+        }
+      })
+
+      panels.forEach((panel) => {
+        panel.classList.toggle(
+          'hidden',
+          panel.id !== selectedTab.getAttribute('aria-controls'),
+        )
+      })
+    }
+
     tabs.forEach((tab) => {
-      const isSelected = tab === selectedTab
-      tab.setAttribute('aria-selected', isSelected ? 'true' : 'false')
-      tab.setAttribute('tabindex', isSelected ? '-1' : '0')
-      tab.classList.toggle('selected', isSelected)
-      tab.classList.toggle('unselected', !isSelected)
-      if (isSelected) {
-        tab.classList.remove('focus:ring-2', 'focus:ring-blue-500')
-      } else {
-        tab.classList.add('focus:ring-2', 'focus:ring-blue-500')
-      }
-    })
-
-    panels.forEach((panel) => {
-      panel.classList.toggle(
-        'hidden',
-        panel.id !== selectedTab.getAttribute('aria-controls'),
-      )
+      tab.addEventListener('click', () => selectTab(tab))
     })
   }
 
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', () => selectTab(tab))
-  })
+  // ページ読み込み時に実行
+  document.addEventListener('DOMContentLoaded', setupFooter)
+
+  // ビュートランジション後に実行
+  document.addEventListener('astro:after-swap', setupFooter)
 </script>
