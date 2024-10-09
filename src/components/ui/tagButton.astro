@@ -1,17 +1,17 @@
 ---
 interface Props {
-  href: string;
-  text: string;
+  href: string
+  text: string
 }
 
-const { href, text } = Astro.props;
+const { href, text } = Astro.props
 ---
 
 <li>
   <a
     href={href}
     aria-label={`${text} に移動`}
-    class="block w-full py-4 px-4 text-center border dark:border-white text-white dark:text-white bg-custom-dark hover:bg-purple-800 dark:hover:bg-purple-900"
+    class="block w-full py-1 px-3 text-center border dark:border-white text-white dark:text-white bg-custom-dark hover:bg-purple-800 dark:hover:bg-purple-900"
   >
     <div class="flex items-center justify-center">
       <p class="flex-grow text-center">#{text}</p>

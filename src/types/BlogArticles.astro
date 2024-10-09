@@ -9,7 +9,7 @@ interface Category {
   fullName: string
   slug: string
   _id: string
-  _sys: any  // または適切な型を指定
+  _sys: any // または適切な型を指定
 }
 
 export interface BlogArticles {
@@ -17,7 +17,7 @@ export interface BlogArticles {
   slug: string
   body: string
   tags: Tag[]
-  category: Category 
+  category: Category
   coverImage: {
     src: string
     width: number
