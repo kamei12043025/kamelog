@@ -1,11 +1,13 @@
 ---
-import { Image } from 'astro:assets';
-import { newtClient } from 'src/lib/newt';
+import { newtClient } from 'src/lib/newt'
 
-import type { BlogArticles } from 'src/types/BlogArticles.astro';
+import type { BlogArticles } from 'src/types/BlogArticles.astro'
 
-import PageLayout from 'src/layouts/PageLayout.astro';
-import FormattedDate from '@components/utils/FormattedDate.astro';
+import BlogGrid from '@components/ui/blogGrid.astro'
+import PageTitle from '@components/utils/pageTitle.astro'
+import PageLayout from 'src/layouts/PageLayout.astro'
+import ScrollToTop from '@components/utils/scrollToTop.astro'
+import ScrollProgress from '@components/utils/scrollProgress.astro'
 
 export async function getStaticPaths() {
   const { items: blogs } = await newtClient.getContents<BlogArticles>({
@@ -14,104 +16,39 @@ export async function getStaticPaths() {
     query: {
       select: ['tags'],
     },
-  });
+  })
 
-  const uniqueTags = [...new Set(blogs.flatMap(blog => blog.tags.map(tag => tag.slug)))];
+  const uniqueTags = [
+    ...new Set(blogs.flatMap((blog) => blog.tags.map((tag) => tag.slug))),
+  ]
 
-  return uniqueTags.map(slug => ({
+  return uniqueTags.map((slug) => ({
     params: { slug },
     props: { slug },
-  }));
+  }))
 }
 
-const { slug } = Astro.params;
+const { slug } = Astro.params
 
 const { items: allBlogs } = await newtClient.getContents<BlogArticles>({
   appUid: 'blog',
   modelUid: 'article',
   query: {
-    select: ['title', 'slug', 'tags', 'coverImage', '_sys']
+    select: ['title', 'slug', 'tags', 'coverImage', 'category', '_sys'],
   },
-});
+})
 8
-const tagBlogs = allBlogs.filter(blog => blog.tags.some(blogTag => blogTag.slug === slug));
-
-const gridConfigs = [
-  { cols: 'grid-cols-1 md:grid-cols-3 lg:grid-cols-3', slice: [0, 3] },
-  { cols: 'grid-cols-1 md:grid-cols-3 lg:grid-cols-4', slice: [3, 11] },
-]
+const tagBlogs = allBlogs.filter((blog) =>
+  blog.tags.some((blogTag) => blogTag.slug === slug),
+)
 ---
 
-<PageLayout title={`${slug}のタグがついた記事一覧`} description={`${slug}のタグがついた記事の一覧ページです。`}>
-  <h1 class="theme-color text-center text-2xl md:text-3xl font-bold mb-8">Tags: {slug}</h1>
-  <div class="grid grid-cols-12 gap-4">
-    {
-      gridConfigs.map(({ cols, slice }) => (
-        <div class={`col-span-12 grid ${cols} gap-6`}>
-          {tagBlogs.slice(...slice).map((blog) => (
-            <div class="col-span-1">
-              <article
-                aria-labelledby={blog.slug}
-                data-href={`/blogs/${blog.slug}`}
-                class="grid grid-rows-[auto_1fr] h-full bg-transparent transition-all group relative"
-              >
-                <div class="absolute bottom-0 left-0 w-full h-[1px] flex">
-                  <div class="w-1/3 theme-group-hover-border group-hover:w-full transition-all"></div>
-                  <div class="w-2/3 bg-gray-400 dark:bg-white"></div>
-                </div>
-
-                <a href={`/blogs/${blog.slug}`} aria-label="">
-                  <h2
-                    id={blog.slug}
-                    class="text-xl mb-2 row-start-2 line-clamp-2 theme-group-hover-text theme-color"
-                  >
-                    {blog.title}
-                  </h2>
-                </a>
-                {blog.tags && blog.tags.length > 0 && (
-                  <div class="mb-2 row-start-3">
-                    <span class="dark:text-white">Tag: </span>
-                    {blog.tags.map((blogTag) => (
-                      <a
-                        href={`/tags/${blogTag.slug}`}
-                        class="text-center px-2 py-1 ml-2 border border-gray-400 dark:border-white dark:text-white theme-color-hover text-xs "
-                      >
-                        #{blogTag.name}
-                      </a>
-                    ))}
-                  </div>
-                )}
-                <p class="mb-2 theme-color text-xs md:text-sm">
-                  <span>投稿日: </span>
-                  <FormattedDate date={blog._sys.raw.publishedAt} />
-                </p>
-                <a
-                  href={`/blogs/${blog.slug}`}
-                  class="row-start-1 mb-4 relative overflow-hidden"
-                >
-                  {blog.coverImage && (
-                    <Image
-                      src={blog.coverImage.src}
-                      width={blog.coverImage.width}
-                      height={blog.coverImage.height}
-                      fetchpriority="high"
-                      loading="eager"
-                      format="avif"
-                      alt=""
-                      class="w-full h-auto object-cover transition-transform group-hover:scale-110"
-                    />
-                  )}
-                  <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span class="text-white text-lg font-bold transform translate-y-1 group-hover:translate-y-0 transition-transform">
-                      記事を読む
-                    </span>
-                  </div>
-                </a>
-              </article>
-            </div>
-          ))}
-        </div>
-      ))
-    }
-  </div>
+<PageLayout
+  title={`${slug}記事一覧`}
+  description={`${slug}のタグがついた記事の一覧ページです。`}
+>
+  <PageTitle title={`${slug} : 記事一覧`} />
+  <BlogGrid blogs={tagBlogs} />
+  <ScrollProgress />
+  <ScrollToTop />
 </PageLayout>

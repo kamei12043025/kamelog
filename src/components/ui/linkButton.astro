@@ -1,12 +1,12 @@
 ---
-import ArrowRightIcon from '@icons/arrowRight.astro';
+import ArrowRightIcon from '@icons/arrowRight.astro'
 
 export interface Props {
-  href: string;
-  text: string;
+  href: string
+  text: string
 }
 
-const { href, text } = Astro.props;
+const { href, text } = Astro.props
 ---
 
 <li>
@@ -17,7 +17,7 @@ const { href, text } = Astro.props;
   >
     <div class="flex items-center justify-center">
       <p class="flex-grow text-center">{text}</p>
-      <ArrowRightIcon/>
+      <ArrowRightIcon />
     </div>
   </a>
 </li>

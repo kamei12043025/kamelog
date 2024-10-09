@@ -1,11 +1,11 @@
 ---
-import LinkButton from '@components/ui/linkButton.astro';
-import TagButton from '@components/ui/tagButton.astro';
-import { paths } from '@constants/path.ts';
-import TwitterIcon from '@icons/x.astro';
-import GithubIcon from '@icons/GithubIcon.astro';
-import { newtClient } from 'src/lib/newt';
-import type { BlogArticles } from 'src/types/BlogArticles.astro';
+import LinkButton from '@components/ui/linkButton.astro'
+import TagButton from '@components/ui/tagButton.astro'
+import { paths } from '@constants/path.ts'
+import TwitterIcon from '@icons/x.astro'
+import GithubIcon from '@icons/githubIcon.astro'
+import { newtClient } from 'src/lib/newt'
+import type { BlogArticles } from 'src/types/BlogArticles.astro'
 // 他のインポート...
 
 const topPage = Astro.url.pathname === paths.home
@@ -21,16 +21,26 @@ const { items: blogs } = await newtClient.getContents<BlogArticles>({
   },
 })
 
-const uniqueCategories = [...new Set(blogs.map(blog => JSON.stringify(blog.category)))].map(cat => JSON.parse(cat));
-const uniqueTags = [...new Set(blogs.flatMap(blog => 
-  blog.tags.map(tag => JSON.stringify({ name: tag.name, slug: tag.slug }))
-))].map(tag => JSON.parse(tag));
-
+const uniqueCategories = [
+  ...new Set(blogs.map((blog) => JSON.stringify(blog.category))),
+].map((cat) => JSON.parse(cat))
+const uniqueTags = [
+  ...new Set(
+    blogs.flatMap((blog) =>
+      blog.tags.map((tag) =>
+        JSON.stringify({ name: tag.name, slug: tag.slug }),
+      ),
+    ),
+  ),
+].map((tag) => JSON.parse(tag))
 ---
 
 <footer class="bg-white dark:bg-black">
   <div class="max-w-2xl mx-auto py-20 px-5 md:px-0 space-y-10">
-    <div class="flex justify-center items-center border border-black dark:border-white" role="tablist">
+    <div
+      class="flex justify-center items-center border border-black dark:border-white"
+      role="tablist"
+    >
       <button
         role="tab"
         aria-selected="true"
@@ -53,146 +63,180 @@ const uniqueTags = [...new Set(blogs.flatMap(blog =>
       </button>
     </div>
 
-    <div id="categories-panel" role="tabpanel" aria-labelledby="categories-tab" class="mt-4">
+    <div
+      id="categories-panel"
+      role="tabpanel"
+      aria-labelledby="categories-tab"
+      class="mt-4"
+    >
       <ul class="grid grid-cols-1 lg:grid-cols-2 gap-2">
-        {uniqueCategories.map((category) => (
-            <LinkButton href={`/category/${category.slug}`} text={category.fullName} />
-        ))}
+        {
+          uniqueCategories.map((category) => (
+            <LinkButton
+              href={`/category/${category.slug}`}
+              text={category.fullName}
+            />
+          ))
+        }
       </ul>
     </div>
 
-    <div id="tags-panel" role="tabpanel" aria-labelledby="tags-tab" class="mt-4 hidden">
+    <div
+      id="tags-panel"
+      role="tabpanel"
+      aria-labelledby="tags-tab"
+      class="mt-4 hidden"
+    >
       <ul class="flex flex-wrap gap-2">
-        {uniqueTags.map((tag) => (
-          <li>
-            <TagButton href={`/tags/${tag.slug}`} text={tag.name} />
-          </li>
-        ))}
+        {
+          uniqueTags.map((tag) => (
+            <li>
+              <TagButton href={`/tags/${tag.slug}`} text={tag.name} />
+            </li>
+          ))
+        }
       </ul>
     </div>
 
     <nav>
-        <ul class="flex flex-col lg:flex-row justify-center items-center space-y-4 lg:space-y-0" aria-label="ヘッダーメニュー">
-          <li>
-            {
-              topPage ? (
-                <span
-                  class="nav-link-current px-3 current-page text-purple-800 dark:text-custom-purple"
-                  aria-current="page"
-                >
-                  トップページ
-                </span>
-              ) : (
-                <a
-                  href={paths.home}
-                  class="nav-link-text px-3 hover:border-b-2 hover:border-purple-800 hover:text-purple-800 dark:hover:text-custom-purple duration-150 outline-purple-800"
-                >
-                  トップページ
-                </a>
-              )
-            }
-          </li>
-          <li>
-            {
-              articlesPage ? (
-                <span
-                  class="nav-link-current px-3 current-page text-blue-600 dark:text-custom-blue"
-                  aria-current="page"
-                >
-                  ブログ一覧
-                </span>
-              ) : (
-                <a
-                  href={paths.articles}
-                  class="nav-link-text px-3 hover:border-b-2 hover:border-blue-600 hover:text-blue-600 dark:hover:text-custom-blue duration-150 outline-blue-600"
-                >
-                  ブログ一覧
-                </a>
-              )
-            }
-          </li>
-          <li>
-            {
-              aboutPage ? (
-                <span
-                  class="nav-link-current px-3 current-page text-green-600 dark:text-custom-green"
-                  aria-current="page"
-                >
-                  当ブログについて
-                </span>
-              ) : (
-                <a
-                  href={paths.about}
-                  class="nav-link-text px-3 hover:border-b-2 hover:border-green-600 hover:text-green-600 dark:hover:text-custom-green duration-150 outline-green-600"
-                >
-                  当ブログについて
-                </a>
-              )
-            }
-          </li>
-          <li>
-            {
-              contactPage ? (
-                <span
-                  class="nav-link-current uppercase px-3 text-xl current-page text-yellow-600 dark:text-custom-yellow"
-                  aria-current="page"
-                >
-                  お問い合わせ
-                </span>
-              ) : (
-                <a
-                  href={paths.contact}
-                  class="nav-link-text px-3 hover:border-b-2 hover:border-yellow-600 hover:text-yellow-600 dark:hover:text-custom-yellow duration-150 outline-yellow-600"
-                >
-                  お問い合わせ
-                </a>
-              )
-            }
-          </li>
-        </ul>
-      </nav>
+      <ul
+        class="flex flex-col lg:flex-row justify-center items-center space-y-4 lg:space-y-0"
+        aria-label="ヘッダーメニュー"
+      >
+        <li>
+          {
+            topPage ? (
+              <span
+                class="nav-link-current px-3 current-page text-purple-800 dark:text-custom-purple"
+                aria-current="page"
+              >
+                トップページ
+              </span>
+            ) : (
+              <a
+                href={paths.home}
+                class="nav-link-text px-3 hover:border-b-2 hover:border-purple-800 hover:text-purple-800 dark:hover:text-custom-purple duration-150 outline-purple-800"
+              >
+                トップページ
+              </a>
+            )
+          }
+        </li>
+        <li>
+          {
+            articlesPage ? (
+              <span
+                class="nav-link-current px-3 current-page text-blue-600 dark:text-custom-blue"
+                aria-current="page"
+              >
+                ブログ一覧
+              </span>
+            ) : (
+              <a
+                href={paths.articles}
+                class="nav-link-text px-3 hover:border-b-2 hover:border-blue-600 hover:text-blue-600 dark:hover:text-custom-blue duration-150 outline-blue-600"
+              >
+                ブログ一覧
+              </a>
+            )
+          }
+        </li>
+        <li>
+          {
+            aboutPage ? (
+              <span
+                class="nav-link-current px-3 current-page text-green-600 dark:text-custom-green"
+                aria-current="page"
+              >
+                当ブログについて
+              </span>
+            ) : (
+              <a
+                href={paths.about}
+                class="nav-link-text px-3 hover:border-b-2 hover:border-green-600 hover:text-green-600 dark:hover:text-custom-green duration-150 outline-green-600"
+              >
+                当ブログについて
+              </a>
+            )
+          }
+        </li>
+        <li>
+          {
+            contactPage ? (
+              <span
+                class="nav-link-current uppercase px-3 text-xl current-page text-yellow-600 dark:text-custom-yellow"
+                aria-current="page"
+              >
+                お問い合わせ
+              </span>
+            ) : (
+              <a
+                href={paths.contact}
+                class="nav-link-text px-3 hover:border-b-2 hover:border-yellow-600 hover:text-yellow-600 dark:hover:text-custom-yellow duration-150 outline-yellow-600"
+              >
+                お問い合わせ
+              </a>
+            )
+          }
+        </li>
+      </ul>
+    </nav>
 
-      <div class="flex justify-center items-center">
-        <a href="https://github.com/kame-log" target="_blank" aria-label="GitHubを見る" class="theme-color hover:bg-gray-200 hover:text-purple-600 dark:hover:text-custom-purple rounded-md p-4 transition-colors duration-300">
-            <span aria-hidden="true">
-                <GithubIcon />
-            </span>
-        </a>
-        <a href="https://twitter.com/kame_log" target="_blank" aria-label="X（旧Twitter）を見る" class="theme-color hover:bg-gray-200 hover:text-blue-600 dark:hover:text-custom-blue rounded-md p-4 transition-colors duration-300">
-            <span aria-hidden="true">
-                <TwitterIcon />
-            </span>
-        </a>
-      </div>
+    <div class="flex justify-center items-center">
+      <a
+        href="https://github.com/kame-log"
+        target="_blank"
+        aria-label="GitHubを見る"
+        class="theme-color hover:bg-gray-200 hover:text-purple-600 dark:hover:text-custom-purple rounded-md p-4 transition-colors duration-300"
+      >
+        <span aria-hidden="true">
+          <GithubIcon />
+        </span>
+      </a>
+      <a
+        href="https://twitter.com/kame_log"
+        target="_blank"
+        aria-label="X（旧Twitter）を見る"
+        class="theme-color hover:bg-gray-200 hover:text-blue-600 dark:hover:text-custom-blue rounded-md p-4 transition-colors duration-300"
+      >
+        <span aria-hidden="true">
+          <TwitterIcon />
+        </span>
+      </a>
+    </div>
 
-      <p class="text-black dark:text-white text-center">© 2024 KAMELOG</p>
+    <p class="text-black dark:text-white text-center">© 2024 KAMELOG</p>
   </div>
 </footer>
 
 <script>
-  const tabs = document.querySelectorAll<HTMLButtonElement>('button[role="tab"]');
-  const panels = document.querySelectorAll<HTMLElement>('[role="tabpanel"]');
+  const tabs =
+    document.querySelectorAll<HTMLButtonElement>('button[role="tab"]')
+  const panels = document.querySelectorAll<HTMLElement>('[role="tabpanel"]')
 
   function selectTab(selectedTab: HTMLButtonElement) {
-    tabs.forEach(tab => {
-      const isSelected = tab === selectedTab;
-      tab.setAttribute('aria-selected', isSelected ? 'true' : 'false');
-      tab.setAttribute('tabindex', isSelected ? '-1' : '0');
-      tab.classList.toggle('selected', isSelected);
-      tab.classList.toggle('unselected', !isSelected);
+    tabs.forEach((tab) => {
+      const isSelected = tab === selectedTab
+      tab.setAttribute('aria-selected', isSelected ? 'true' : 'false')
+      tab.setAttribute('tabindex', isSelected ? '-1' : '0')
+      tab.classList.toggle('selected', isSelected)
+      tab.classList.toggle('unselected', !isSelected)
       if (isSelected) {
-        tab.classList.remove('focus:ring-2', 'focus:ring-blue-500');
+        tab.classList.remove('focus:ring-2', 'focus:ring-blue-500')
       } else {
-        tab.classList.add('focus:ring-2', 'focus:ring-blue-500');
+        tab.classList.add('focus:ring-2', 'focus:ring-blue-500')
       }
-    });
+    })
 
-    panels.forEach(panel => {
-      panel.classList.toggle('hidden', panel.id !== selectedTab.getAttribute('aria-controls'));
-    });
+    panels.forEach((panel) => {
+      panel.classList.toggle(
+        'hidden',
+        panel.id !== selectedTab.getAttribute('aria-controls'),
+      )
+    })
   }
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => selectTab(tab));
-  });
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => selectTab(tab))
+  })
 </script>

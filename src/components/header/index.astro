@@ -19,7 +19,12 @@ const articlesPage = Astro.url.pathname === paths.articles
   <div class="container py-2 md:py-3 px-5 md:px-6 mx-auto flex items-center">
     <!-- SP Menu Button -->
     <div class="flex-1 lg:hidden">
-      <button role="button" id="menuButton" class="theme-color" aria-label="メニューを開く">
+      <button
+        role="button"
+        id="menuButton"
+        class="theme-color"
+        aria-label="メニューを開く"
+      >
         <MenuIcon />
       </button>
     </div>
@@ -28,8 +33,8 @@ const articlesPage = Astro.url.pathname === paths.articles
     <div class="flex-1 text-center lg:text-left">
       {
         topPage ? (
-          <h1 class="base-text-2xl uppercase">
-            <a href="#header" aria-label="トップページ上部に戻る">
+          <h1 class="base-text-2xl uppercase hover:text-purple-800 dark:hover:text-custom-purple">
+            <a href="#" aria-label="トップページ上部に戻る">
               KAMELOG
             </a>
           </h1>
@@ -212,5 +217,14 @@ const articlesPage = Astro.url.pathname === paths.articles
       document.body.style.position = ''
       document.body.style.width = ''
     }, 300)
+  })
+
+  // スムーズスクロール機能の追加
+  document.querySelector('a[href="#"]')?.addEventListener('click', (e) => {
+    e.preventDefault()
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   })
 </script>
