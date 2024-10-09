@@ -1,0 +1,40 @@
+---
+import BlogGrid from '../../components/ui/blogGrid.astro'
+import PageHeader from '@components/ui/pageHeader.astro'
+import PageLayout from 'src/layouts/PageLayout.astro'
+import Pagination from '@components/ui/pagination.astro'
+
+import { newtClient } from 'src/lib/newt'
+
+import type { BlogArticles } from 'src/types/BlogArticles.astro'
+import type { GetStaticPathsOptions, Page } from 'astro'
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const { items: blogs } = await newtClient.getContents<BlogArticles>({
+    appUid: 'blog',
+    modelUid: 'article',
+  })
+
+  return paginate(blogs, { pageSize: 10 })
+}
+
+const { page } = Astro.props as { page: Page<BlogArticles> }
+---
+
+<PageLayout
+  title="KAMELOG"
+  description="NewtとAstroを利用したブログです。日々のアウトプットを残していきます。"
+>
+  <PageHeader
+    title="ブログ一覧"
+    currentPage={page.currentPage}
+    lastPage={page.lastPage}
+  />
+  <BlogGrid blogs={page.data} />
+  <Pagination
+    prevUrl={page.url.prev}
+    nextUrl={page.url.next}
+    currentPage={page.currentPage}
+    totalPages={page.lastPage}
+  />
+</PageLayout>

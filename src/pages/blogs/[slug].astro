@@ -1,6 +1,8 @@
 ---
-import Layout from '../../layouts/Layout.astro'
+import PageLayout from 'src/layouts/PageLayout.astro'
+
 import { newtClient } from '../../lib/newt'
+
 import type { BlogArticles } from '../../types/BlogArticles.astro'
 
 export const getStaticPaths = async () => {
@@ -20,9 +22,7 @@ export const getStaticPaths = async () => {
 const { blog } = Astro.props
 ---
 
-<Layout title={blog.title} description="投稿詳細ページです">
-  <main>
-    <h2>{blog.title}</h2>
-    <article set:html={blog.body} />
-  </main>
-</Layout>
+<PageLayout title={blog.title} description="投稿詳細ページです">
+  <h2>{blog.title}</h2>
+  <article set:html={blog.body} />
+</PageLayout>

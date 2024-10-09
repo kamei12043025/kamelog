@@ -8,7 +8,8 @@
 >
   <button
     role="button"
-    class="bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-full transition-colors duration-300 flex items-center justify-center"
+    aria-label="トップに戻る"
+    class="bg-purple-800 dark:bg-custom-purple text-white p-3 rounded-full transition-colors duration-300 flex items-center justify-center"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -27,47 +28,57 @@
 </div>
 
 <script>
-  const scrollToTopButton = document.getElementById(
-    'scrollToTop',
-  ) as HTMLDivElement
-  const showScrollHeight = window.innerHeight * 0.5
-  const minPageHeight = window.innerHeight * 1.5
+  function setupScrollToTop() {
+    const scrollToTopButton = document.getElementById(
+      'scrollToTop',
+    ) as HTMLDivElement
+    const showScrollHeight = window.innerHeight * 0.5
+    const minPageHeight = window.innerHeight * 1.5
 
-  function toggleScrollToTopButton() {
-    if (!scrollToTopButton) return
+    function toggleScrollToTopButton() {
+      if (!scrollToTopButton) return
 
-    if (document.body.scrollHeight > minPageHeight) {
-      if (window.scrollY > showScrollHeight) {
-        scrollToTopButton.classList.remove('opacity-0', 'pointer-events-none')
-        scrollToTopButton.classList.add('opacity-100', 'pointer-events-auto')
+      if (document.body.scrollHeight > minPageHeight) {
+        if (window.scrollY > showScrollHeight) {
+          scrollToTopButton.classList.remove('opacity-0', 'pointer-events-none')
+          scrollToTopButton.classList.add('opacity-100', 'pointer-events-auto')
+        } else {
+          scrollToTopButton.classList.remove(
+            'opacity-100',
+            'pointer-events-auto',
+          )
+          scrollToTopButton.classList.add('opacity-0', 'pointer-events-none')
+        }
       } else {
-        scrollToTopButton.classList.remove('opacity-100', 'pointer-events-auto')
         scrollToTopButton.classList.add('opacity-0', 'pointer-events-none')
       }
-    } else {
-      scrollToTopButton.classList.add('opacity-0', 'pointer-events-none')
     }
-  }
 
-  function scrollToTop(e: Event) {
-    e.preventDefault()
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
-  }
-
-  if (scrollToTopButton) {
-    const button = scrollToTopButton.querySelector('button')
-    if (button) {
-      button.addEventListener('click', scrollToTop)
+    function scrollToTop(e: Event) {
+      e.preventDefault()
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
     }
+
+    if (scrollToTopButton) {
+      const button = scrollToTopButton.querySelector('button')
+      if (button) {
+        button.addEventListener('click', scrollToTop)
+      }
+    }
+
+    window.addEventListener('scroll', toggleScrollToTopButton)
+    window.addEventListener('resize', toggleScrollToTopButton)
+
+    // 初期状態を設定
+    toggleScrollToTopButton()
   }
 
-  window.addEventListener('scroll', toggleScrollToTopButton)
-  window.addEventListener('resize', toggleScrollToTopButton)
-  document.addEventListener('astro:after-swap', toggleScrollToTopButton)
+  // ページ読み込み時に実行
+  document.addEventListener('DOMContentLoaded', setupScrollToTop)
 
-  // 初期状態を設定
-  toggleScrollToTopButton()
+  // ビュートランジション後に実行
+  document.addEventListener('astro:after-swap', setupScrollToTop)
 </script>

@@ -1,9 +1,7 @@
 ---
 import BlogGrid from '@components/ui/blogGrid.astro'
-import PageTitle from '@components/utils/pageTitle.astro'
+import PageHeader from '@components/ui/pageHeader.astro'
 import PageLayout from 'src/layouts/PageLayout.astro'
-import ScrollToTop from '@components/utils/scrollToTop.astro'
-import ScrollProgress from '@components/utils/scrollProgress.astro'
 
 import { newtClient } from 'src/lib/newt'
 
@@ -44,8 +42,9 @@ const { items: categoryBlogs } = await newtClient.getContents<BlogArticles>({
   title={`${category.fullName} : 記事一覧`}
   description={`${category.fullName}カテゴリの記事一覧ページです。`}
 >
-  <PageTitle title={`${category.fullName} : 記事一覧`} />
+  <PageHeader
+    title={`${category.fullName} : 記事一覧`}
+    description={`${category.fullName}カテゴリの記事一覧ページです。`}
+  />
   <BlogGrid blogs={categoryBlogs} />
-  <ScrollProgress />
-  <ScrollToTop />
 </PageLayout>
