@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string
+  description?: string
+  currentPage?: number
+  lastPage?: number
+}
+
+const { title, description, currentPage, lastPage } = Astro.props
+---
+
+<hgroup class="space-y-4 mb-12">
+  <h1 class="theme-color text-center text-2xl md:text-3xl font-bold">
+    {title}
+  </h1>
+  <p class="theme-color text-center text-sm md:text-base">
+    {description}
+  </p>
+  {
+    currentPage && lastPage && (
+      <p class="theme-color text-center text-sm md:text-base">
+        {currentPage} / {lastPage} ページ目
+      </p>
+    )
+  }
+</hgroup>

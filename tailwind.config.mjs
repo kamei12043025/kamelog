@@ -71,7 +71,8 @@ export default {
           '@apply bg-purple-800 dark:bg-purple-900 text-white': {},
         },
         '.tab-button.unselected': {
-          '@apply bg-white dark:bg-black text-black dark:text-white': {},
+          '@apply bg-white dark:bg-black text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800':
+            {},
         },
         '.tab-button:first-child': {
           '@apply border-r border-black dark:border-white': {},

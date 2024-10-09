@@ -10,26 +10,28 @@
 </div>
 
 <script>
-  const scrollProgress = document.getElementById('scroll-progress')
+  function setupScrollProgress() {
+    const scrollProgress = document.getElementById('scroll-progress')
 
-  function updateScrollProgress() {
-    const scrollPosition = window.scrollY
-    const totalHeight =
-      document.documentElement.scrollHeight - window.innerHeight
-    const scrollPercentage = Math.round((scrollPosition / totalHeight) * 100)
+    function updateScrollProgress() {
+      const scrollPosition = window.scrollY
+      const totalHeight =
+        document.documentElement.scrollHeight - window.innerHeight
+      const scrollPercentage = Math.round((scrollPosition / totalHeight) * 100)
 
-    if (scrollProgress) {
-      scrollProgress.textContent = `${scrollPercentage}%`
+      if (scrollProgress) {
+        scrollProgress.textContent = `${scrollPercentage}%`
+      }
     }
+
+    window.addEventListener('scroll', updateScrollProgress)
+    window.addEventListener('resize', updateScrollProgress)
+    updateScrollProgress()
   }
 
-  window.addEventListener('scroll', updateScrollProgress)
-  window.addEventListener('resize', updateScrollProgress)
-  updateScrollProgress()
-</script>
+  // ページ読み込み時に実行
+  document.addEventListener('DOMContentLoaded', setupScrollProgress)
 
-<!-- scrollPosition：現在のスクロール位置を取得します。
-totalHeight：スクロール可能な総高さを計算します（ページ全体の高さからビューポートの高さを引いた値）。
-scrollPercentage：スクロール位置を総高さで割り、100を掛けてパーセンテージを計算します。
-計算した値をscroll-progress要素のテキストとして設定します。
-スクロールイベントとリサイズイベントにリスナーを追加し、常に最新の進捗を表示します。 -->
+  // ビュートランジション後に実行
+  document.addEventListener('astro:after-swap', setupScrollProgress)
+</script>

@@ -1,0 +1,46 @@
+---
+const { prevUrl, nextUrl, currentPage, totalPages } = Astro.props
+
+const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
+---
+
+<nav class="flex justify-center items-center mt-8 space-x-2">
+  {
+    prevUrl && (
+      <a
+        href={prevUrl}
+        class="bg-purple-800 dark:bg-purple-900 text-white px-3 py-1 rounded-lg"
+      >
+        前へ
+      </a>
+    )
+  }
+
+  <div class="flex items-center space-x-1">
+    {
+      pageNumbers.map((num) => (
+        <a
+          href={`/blogs/${num}`}
+          class={`px-3 py-1 rounded-lg ${
+            num === currentPage
+              ? 'bg-purple-800 dark:bg-purple-900 text-white '
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          {num}
+        </a>
+      ))
+    }
+  </div>
+
+  {
+    nextUrl && (
+      <a
+        href={nextUrl}
+        class="bg-purple-800 dark:bg-purple-900 text-white  px-3 py-1 rounded-lg"
+      >
+        次へ
+      </a>
+    )
+  }
+</nav>

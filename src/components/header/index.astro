@@ -1,8 +1,8 @@
 ---
 import MenuIcon from '@icons/menu.astro'
-import ThemeIcon from '@icons/themeIcon.astro'
 import CloseIcon from '@icons/close.astro'
 import ArrowRightIcon from '@icons/arrowRight.astro'
+import ThemeToggleButton from '@components/ui/button/themeToggleButton.astro'
 
 import { paths } from '@constants/path'
 
@@ -31,21 +31,11 @@ const articlesPage = Astro.url.pathname === paths.articles
 
     <!-- Logo -->
     <div class="flex-1 text-center lg:text-left">
-      {
-        topPage ? (
-          <h1 class="base-text-2xl uppercase hover:text-purple-800 dark:hover:text-custom-purple">
-            <a href="#" aria-label="トップページ上部に戻る">
-              KAMELOG
-            </a>
-          </h1>
-        ) : (
-          <p class="base-text-2xl uppercase">
-            <a href="/" aria-label="トップページに戻る">
-              KAMELOG
-            </a>
-          </p>
-        )
-      }
+      <p
+        class="base-text-2xl uppercase hover:text-purple-800 dark:hover:text-custom-purple"
+      >
+        <a href="/" aria-label="トップページに戻る"> KAMELOG </a>
+      </p>
     </div>
 
     <!-- PC Navigation -->
@@ -77,14 +67,14 @@ const articlesPage = Astro.url.pathname === paths.articles
                 class="nav-link-current px-3 current-page text-blue-600 dark:text-custom-blue"
                 aria-current="page"
               >
-                Articles
+                Blogs
               </span>
             ) : (
               <a
                 href={paths.articles}
                 class="nav-link-text px-3 hover:border-b-2 hover:border-blue-600 hover:text-blue-600 dark:hover:text-custom-blue duration-150 outline-blue-600"
               >
-                Articles
+                Blogs
               </a>
             )
           }
@@ -112,7 +102,7 @@ const articlesPage = Astro.url.pathname === paths.articles
           {
             contactPage ? (
               <span
-                class="nav-link-current uppercase px-3 text-xl current-page text-yellow-600 dark:text-custom-yellow"
+                class="nav-link-current px-3 current-page text-yellow-600 dark:text-custom-yellow"
                 aria-current="page"
               >
                 Contact
@@ -131,7 +121,7 @@ const articlesPage = Astro.url.pathname === paths.articles
     </nav>
     <!-- Theme Toggle -->
     <div class="flex-1 flex justify-end">
-      <ThemeIcon />
+      <ThemeToggleButton />
     </div>
   </div>
 </header>
@@ -168,7 +158,7 @@ const articlesPage = Astro.url.pathname === paths.articles
           href={paths.articles}
           class="dialog-menu outline-blue-600 dark:outline-custom-blue group"
         >
-          <li class="nav-link-text">Articles</li>
+          <li class="nav-link-text">Blogs</li>
           <ArrowRightIcon class="dialog-arrow-animation" />
         </a>
         <a
@@ -191,40 +181,39 @@ const articlesPage = Astro.url.pathname === paths.articles
 </dialog>
 
 <script>
-  const menuButton = document.getElementById('menuButton')
-  const menuDialog = document.getElementById(
-    'menuDialog',
-  ) as HTMLDialogElement | null
-  const closeButton = document.getElementById('closeButton')
+  function setupHeader() {
+    const menuButton = document.getElementById('menuButton')
+    const menuDialog = document.getElementById(
+      'menuDialog',
+    ) as HTMLDialogElement | null
+    const closeButton = document.getElementById('closeButton')
 
-  menuButton?.addEventListener('click', () => {
-    menuDialog?.showModal()
-    document.body.style.overflow = 'hidden'
-    document.body.style.position = 'fixed'
-    document.body.style.width = '100%'
-    setTimeout(() => {
-      menuDialog?.classList.remove('-translate-x-full')
-      menuDialog?.classList.add('backdrop:opacity-100')
-    }, 0)
-  })
-
-  closeButton?.addEventListener('click', () => {
-    menuDialog?.classList.add('-translate-x-full')
-    menuDialog?.classList.remove('backdrop:opacity-100')
-    setTimeout(() => {
-      menuDialog?.close()
-      document.body.style.overflow = ''
-      document.body.style.position = ''
-      document.body.style.width = ''
-    }, 300)
-  })
-
-  // スムーズスクロール機能の追加
-  document.querySelector('a[href="#"]')?.addEventListener('click', (e) => {
-    e.preventDefault()
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
+    menuButton?.addEventListener('click', () => {
+      menuDialog?.showModal()
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
+      setTimeout(() => {
+        menuDialog?.classList.remove('-translate-x-full')
+        menuDialog?.classList.add('backdrop:opacity-100')
+      }, 0)
     })
-  })
+
+    closeButton?.addEventListener('click', () => {
+      menuDialog?.classList.add('-translate-x-full')
+      menuDialog?.classList.remove('backdrop:opacity-100')
+      setTimeout(() => {
+        menuDialog?.close()
+        document.body.style.overflow = ''
+        document.body.style.position = ''
+        document.body.style.width = ''
+      }, 300)
+    })
+  }
+
+  // ページ読み込み時に実行
+  document.addEventListener('DOMContentLoaded', setupHeader)
+
+  // ビュートランジション後に実行
+  document.addEventListener('astro:after-swap', setupHeader)
 </script>
