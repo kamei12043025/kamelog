@@ -23,30 +23,26 @@ export default {
         '.base-text-2xl': {
           '@apply text-2xl md:text-3xl font-bold theme-color tracking-wide': {},
         },
-        
+
         //テーマカラー
         '.theme-color': {
-          '@apply text-black dark:text-white':
-            {},
+          '@apply text-black dark:text-white': {},
         },
-        
+
         '.theme-color-other': {
-          '@apply text-white dark:text-black':
-            {},
+          '@apply text-white dark:text-black': {},
         },
 
         '.theme-bg-color': {
-          '@apply bg-black dark:bg-white':
-            {},
+          '@apply bg-black dark:bg-white': {},
         },
 
         '.theme-group-hover-border': {
-          '@apply bg-purple-800 dark:bg-custom-purple':
-            {},
+          '@apply bg-purple-800 dark:bg-custom-purple': {},
         },
 
         '.theme-group-hover-text': {
-          '@apply group-hover:text-purple-800 dark:group-hover:text-custom-purple':
+          '@apply group-hover:text-purple-800 dark:group-hover:text-custom-purple group-focus-within:text-purple-800 dark:group-focus-within:text-custom-purple':
             {},
         },
 
