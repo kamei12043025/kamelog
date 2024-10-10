@@ -188,7 +188,7 @@ const articlesPage = Astro.url.pathname === paths.articles
     ) as HTMLDialogElement | null
     const closeButton = document.getElementById('closeButton')
 
-    menuButton?.addEventListener('click', () => {
+    function openMenu() {
       menuDialog?.showModal()
       document.body.style.overflow = 'hidden'
       document.body.style.position = 'fixed'
@@ -197,9 +197,9 @@ const articlesPage = Astro.url.pathname === paths.articles
         menuDialog?.classList.remove('-translate-x-full')
         menuDialog?.classList.add('backdrop:opacity-100')
       }, 0)
-    })
+    }
 
-    closeButton?.addEventListener('click', () => {
+    function closeMenu() {
       menuDialog?.classList.add('-translate-x-full')
       menuDialog?.classList.remove('backdrop:opacity-100')
       setTimeout(() => {
@@ -208,6 +208,16 @@ const articlesPage = Astro.url.pathname === paths.articles
         document.body.style.position = ''
         document.body.style.width = ''
       }, 300)
+    }
+
+    menuButton?.addEventListener('click', openMenu)
+    closeButton?.addEventListener('click', closeMenu)
+
+    // backdropをクリックしてメニューを閉じる
+    menuDialog?.addEventListener('click', (event) => {
+      if (event.target === menuDialog) {
+        closeMenu()
+      }
     })
   }
 
