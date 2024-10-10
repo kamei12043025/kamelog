@@ -7,7 +7,6 @@ import { newtClient } from 'src/lib/newt'
 
 import type { BlogArticles } from 'src/types/BlogArticles.astro'
 
-
 export async function getStaticPaths() {
   const { items: blogs } = await newtClient.getContents<BlogArticles>({
     appUid: 'blog',
