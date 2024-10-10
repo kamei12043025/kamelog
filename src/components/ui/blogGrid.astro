@@ -1,7 +1,8 @@
 ---
-import FormattedDate from '@components/utils/formattedDate.astro'
+
 import ClockIcon from '@icons/clock.astro'
 import FolderIcon from '@icons/folder.astro'
+import { formatDate } from '@components/utils/formatteDate.astro'
 
 import { Image } from 'astro:assets'
 
@@ -66,7 +67,7 @@ const gridConfigs = [
               )}
               <p class="theme-color text-xs md:text-sm flex items-center gap-1">
                 <ClockIcon alt="公開日" />
-                <FormattedDate date={blog._sys.raw.publishedAt} />
+                {formatDate(blog._sys.raw.publishedAt)}
               </p>
               <a
                 href={`/blogs/${blog.slug}`}
